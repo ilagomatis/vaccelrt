@@ -7,5 +7,5 @@ if (BUILD_PLUGIN_EXEC)
 endif(BUILD_PLUGIN_EXEC)
 
 if (BUILD_PLUGIN_TPU)
-        add_subdirectory(tpu_plugin)
+        add_subdirectory(tpu)
 endif(BUILD_PLUGIN_TPU)
