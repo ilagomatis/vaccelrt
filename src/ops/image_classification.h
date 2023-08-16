@@ -5,6 +5,7 @@
 #include <stdint.h>
 
 #include "include/ops/image_classification.h"
+#include "include/ops/vaccel_ops.h"
 
 struct vaccel_session;
 struct vaccel_arg;
