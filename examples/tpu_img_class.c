@@ -23,7 +23,7 @@ int main()
 	float input_mean = 128;
 	float input_std = 128;
 	
-	char* output;
+	char* output = (char*)malloc(1000*sizeof(char));
 
 	ret = vaccel_sess_init(&sess, 0);
 	if (ret != VACCEL_OK) {
@@ -41,11 +41,19 @@ int main()
 		goto close_session;
 	}
 
+	printf("\nOutput from tpu-plugin: \n%s\n", output);
+
+
 close_session:
 	if (vaccel_sess_free(&sess) != VACCEL_OK) {
 		fprintf(stderr, "Could not clear session\n");
 		return 1;
 	}
+	
+	free(model_path);
+	free(image_path);
+	free(labels_path);
+	free(output);
 
 	return ret;
 }

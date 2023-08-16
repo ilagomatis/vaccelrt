@@ -1,6 +1,8 @@
 #include <stdio.h>
 #include <plugin.h>
 #include "ops/vaccel_ops.h"
+#include "classify.h"
+#include <ops/image_classification.h>
 
 static int tpu_custom_image_classification(struct vaccel_session *session,
 					   char* model_path,
@@ -16,6 +18,20 @@ static int tpu_custom_image_classification(struct vaccel_session *session,
 	printf("model_path: %s\n", model_path);
 	printf("image_path: %s\n", image_path);
 	printf("labels_path: %s\n", labels_path);
+
+	char*  out = classify_image(model_path,
+			       	          image_path,
+					  labels_path,
+					  input_mean,
+					  input_std);
+	
+	//printf("out: %s", out);
+	
+	//output = (char*)malloc(10000);
+	strcpy(output, out);
+
+	//printf("ouput: %s", output);	
+	//output = out;
 
 	printf("\n\n---\n\n");
 	printf("Ending custom-image-classification operation here");
