@@ -18,7 +18,7 @@ int vaccel_custom_image_classification(struct vaccel_session *sess, char* model_
 			sess->session_id);
 
 	//Get implementation
-	int (*plugin_op)() = get_plugin_op(VACCEL_IMG_CLASSIFICATION);
+	int (*plugin_op)() = get_plugin_op(VACCEL_IMG_CLASSIFICATION, sess->hint);
 	if (!plugin_op)
 		return VACCEL_ENOTSUP;
 
