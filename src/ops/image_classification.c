@@ -14,11 +14,11 @@ int vaccel_custom_image_classification(struct vaccel_session *sess, char* model_
 	if (!sess)
 		return VACCEL_EINVAL;
 
-	vaccel_debug("session:%u Looking for plugin implementing IMAGE_CLASSIFICATION operation",
+	vaccel_debug("session:%u Looking for plugin implementing VACCEL_IMG_CLASSIFICATION operation",
 			sess->session_id);
 
 	//Get implementation
-	int (*plugin_op)() = get_plugin_op(IMAGE_CLASSIFICATION);
+	int (*plugin_op)() = get_plugin_op(VACCEL_IMG_CLASSIFICATION);
 	if (!plugin_op)
 		return VACCEL_ENOTSUP;
 
@@ -30,13 +30,13 @@ int vaccel_custom_image_classification_unpack(struct vaccel_session *sess, struc
 		int nr_read, struct vaccel_arg *write, int nr_write)
 {
 	if (nr_read != 5) {
-		vaccel_error("Wrong number of read arguments in IMAGE_CLASSIFICATION: %d",
+		vaccel_error("Wrong number of read arguments in VACCEL_IMG_CLASSIFICATION: %d",
 				nr_read);
 		return VACCEL_EINVAL;
 	}
 
 	if (nr_write != 1) {
-		vaccel_error("Wrong number of write arguments in IMAGE_CLASSIFICATION: %d",
+		vaccel_error("Wrong number of write arguments in VACCEL_IMG_CLASSIFICATION: %d",
 				nr_write);
 		return VACCEL_EINVAL;
 	}
