@@ -41,13 +41,13 @@ int vaccel_custom_image_classification_unpack(struct vaccel_session *sess, struc
 		return VACCEL_EINVAL;
 	}
 
-	char* model_path  =  *(char**)read[0].buf;
-	char* image_path  =  *(char**)read[1].buf;
-	char* labels_path =  *(char**)read[2].buf;
+	char* model_path  =  (char*)read[0].buf;
+	char* image_path  =  (char*)read[1].buf;
+	char* labels_path =  (char*)read[2].buf;
 	float input_mean  =  *(float*)read[3].buf;
 	float input_std   =  *(float*)read[4].buf;
 
-	char* output      =  *(char**)write[0].buf;
+	char* output      =  (char*)write[0].buf;
 
 	return vaccel_custom_image_classification(sess, model_path, image_path, labels_path,
 			input_mean, input_std, output);
