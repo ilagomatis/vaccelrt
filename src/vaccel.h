@@ -15,7 +15,7 @@
 #ifndef __VACCEL_H__
 #define __VACCEL_H__
 
-#define VACCELRT_VERSION "914649b"
+#define VACCELRT_VERSION "3575d5e-dirty"
 
 #include <stdint.h>
 #include <stddef.h>
@@ -30,7 +30,6 @@
 #include "ops/fpga.h"
 #include "ops/vaccel_ops.h"
 #include "ops/torch.h"
-#include "ops/image_classification.h"
 
 const char *vaccel_rundir(void);
 

@@ -18,6 +18,7 @@
 
 #include <vaccel.h>
 #include <ops/torch.h>
+#include <ops/image_classification.h>
 
 #define noop_info(fmt, ...) \
 	fprintf(stdout, "[noop] " fmt, ##__VA_ARGS__)
@@ -456,6 +457,21 @@ static int noop_torch_sgemm(struct vaccel_session *session,
 	return VACCEL_OK;
 }
 
+static int noop_custom_image_classification(
+				       struct vaccel_session *sess, 
+				       char* model_path,
+                		       char* image_path,
+                		       char* labels_path,
+                		       float input_mean,
+                		       float input_std,
+	       			       char* output
+				       )
+{
+	fprintf(stdout, "[noop] Calling custom_image_classification for session %u\n",
+		sess->session_id);	
+	return VACCEL_OK;
+}
+
 struct vaccel_op ops[] = {
 	VACCEL_OP_INIT(ops[0], VACCEL_NO_OP, noop_noop),
 	VACCEL_OP_INIT(ops[1], VACCEL_BLAS_SGEMM, noop_sgemm),
@@ -476,6 +492,7 @@ struct vaccel_op ops[] = {
 	VACCEL_OP_INIT(ops[16], VACCEL_EXEC_WITH_RESOURCE, noop_exec_with_resource),
 	VACCEL_OP_INIT(ops[17], VACCEL_TORCH_JITLOAD_FORWARD, noop_torch_jitload_forward),
 	VACCEL_OP_INIT(ops[18], VACCEL_TORCH_SGEMM, noop_torch_sgemm),
+	VACCEL_OP_INIT(ops[19], VACCEL_IMG_CLASSIFICATION, noop_custom_image_classification),
 };
 
 
