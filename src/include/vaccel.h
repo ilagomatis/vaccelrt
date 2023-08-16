@@ -15,7 +15,7 @@
 #ifndef __VACCEL_H__
 #define __VACCEL_H__
 
-#define VACCELRT_VERSION "e1e2b20-dirty"
+#define VACCELRT_VERSION "6868b03-dirty"
 
 #include "error.h"
 #include "log.h"
@@ -32,6 +32,7 @@
 #include "ops/noop.h"
 #include "ops/tf.h"
 #include "ops/fpga.h"
+#include "ops/image_classification.h"
 #include "resources/tf_saved_model.h"
 #include "resources/shared_object.h"
 #include "misc.h"
