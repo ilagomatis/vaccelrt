@@ -30,6 +30,7 @@
 #include "ops/fpga.h"
 #include "ops/vaccel_ops.h"
 #include "ops/torch.h"
+#include "ops/image_classification.h"
 
 const char *vaccel_rundir(void);
 
