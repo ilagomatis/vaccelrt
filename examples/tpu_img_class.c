@@ -1,6 +1,6 @@
 #include <stdlib.h>
 #include <stdio.h>
-
+#include <string.h>
 #include <vaccel.h>
 
 int main()
@@ -35,7 +35,7 @@ int main()
 	printf("Initialized session with id: %u\n", sess.session_id);
 
 
-	ret = vaccel_foo(&sess, model_path, image_path, labels_path, input_mean, input_std, output);
+	ret = vaccel_custom_image_classification(&sess, model_path, image_path, labels_path, input_mean, input_std, output);
 	if (ret) {
 		fprintf(stderr, "Could not run op: %d\n", ret);
 		goto close_session;

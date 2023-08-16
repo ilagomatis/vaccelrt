@@ -2,7 +2,7 @@
 #include <plugin.h>
 #include "ops/vaccel_ops.h"
 
-static int tpu_custom_image_classification(struct vaccel_session *session
+static int tpu_custom_image_classification(struct vaccel_session *session,
 					   char* model_path,
                 		       	   char* image_path,
                 		           char* labels_path,
