@@ -12,18 +12,19 @@ static int tpu_custom_image_classification(struct vaccel_session *session,
                 		           float input_std,
 	       			           char* output)
 {
-	fprintf(stdout, "Calling tpu-image-classification for session %u\n", session->session_id);
+	/*fprintf(stdout, "Calling tpu-image-classification for session %u\n", session->session_id);
 	printf("---\n\n");
 
 	printf("model_path: %s\n", model_path);
 	printf("image_path: %s\n", image_path);
 	printf("labels_path: %s\n", labels_path);
-
+	printf("input_mean: %f\ninput_std: %f\n", input_mean, input_std);
+	*/
 	char*  out = classify_image(model_path,
 			       	          image_path,
 					  labels_path,
-					  input_mean,
-					  input_std);
+					  128,
+					  128);
 	
 	//printf("out: %s", out);
 	
@@ -33,8 +34,8 @@ static int tpu_custom_image_classification(struct vaccel_session *session,
 	//printf("ouput: %s", output);	
 	//output = out;
 
-	printf("\n\n---\n\n");
-	printf("Ending custom-image-classification operation here");
+	//printf("\n\n---\n\n");
+	//printf("Ending custom-image-classification operation here");
 
 	return VACCEL_OK;
 }

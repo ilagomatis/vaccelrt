@@ -11,6 +11,7 @@ int vaccel_custom_image_classification(struct vaccel_session *sess, char* model_
 		char* image_path, char* labels_path, float input_mean, float input_std,
 		char* output)
 {
+	//printf("\nvcic input_mean: %f, input_std:%f\n", input_mean, input_std);
 	if (!sess)
 		return VACCEL_EINVAL;
 
@@ -48,7 +49,8 @@ int vaccel_custom_image_classification_unpack(struct vaccel_session *sess, struc
 	float input_std   =  *(float*)read[4].buf;
 
 	char* output      =  (char*)write[0].buf;
-
+	
+	//printf("\nunpack: input_mean: %f, input_std:%f\n", input_mean, input_std);
 	return vaccel_custom_image_classification(sess, model_path, image_path, labels_path,
 			input_mean, input_std, output);
 }
