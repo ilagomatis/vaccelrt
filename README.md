@@ -32,6 +32,7 @@ This fork of vAccelRT contains an extra image-classification operation, along wi
 
 ## Operation
 
+vaccelrt/src/include/ops/image_classification.h
 ```c
 #ifndef __VACCEL_IMAGE_CLASSIFICATION_H__
 #define __VACCEL_IMAGE_CLASSIFICATION_H__
@@ -60,6 +61,7 @@ int vaccel_custom_image_classification(struct vaccel_session *sess,
 #endif /* __VACCEL_IMAGE_CLASSIFICATION_H__ */
 ```
 
+vaccelrt/src/ops/image_classification.h
 ```c
 #ifndef __IMAGE_CLASSIFICATION_H__
 #define __IMAGE_CLASSIFICATION_H__
@@ -79,6 +81,7 @@ int vaccel_custom_image_classification_unpack(struct vaccel_session *sess, struc
 #endif 
 ```
 
+vaccelrt/src/ops/image_classification.c
 ```c
 #include "image_classification.h"
 #include "error.h"
@@ -137,7 +140,141 @@ int vaccel_custom_image_classification_unpack(struct vaccel_session *sess, struc
 ```
 
 ## TPU-Plugin
+vaccelrt/plugins/tpu/vaccel.c
+```c
+#include <stdio.h>
+#include <plugin.h>
+#include "ops/vaccel_ops.h"
+#include "classify.h"
+#include <ops/image_classification.h>
 
+static int tpu_custom_image_classification(struct vaccel_session *session,
+					   char* model_path,
+                		       	   char* image_path,
+                		           char* labels_path,
+                		           float input_mean,
+                		           float input_std,
+	       			           char* output)
+{
+	fprintf(stdout, "Calling tpu-image-classification for session %u\n", session->session_id);
+	printf("---\n\n");
+
+	printf("model_path: %s\n", model_path);
+	printf("image_path: %s\n", image_path);
+	printf("labels_path: %s\n", labels_path);
+
+	char*  out = classify_image(model_path,
+			       	          image_path,
+					  labels_path,
+					  input_mean,
+					  input_std);
+	
+	strcpy(output, out);
+
+	printf("\n\n---\n\n");
+	printf("Ending custom-image-classification operation here");
+
+	return VACCEL_OK;
+}
+
+struct vaccel_op op = VACCEL_OP_INIT(op, VACCEL_IMG_CLASSIFICATION, tpu_custom_image_classification);
+
+static int init(void)
+{
+	return register_plugin_function(&op);
+}
+
+static int fini(void)
+{
+	return VACCEL_OK;
+}
+
+VACCEL_MODULE(
+	.name = "tpu_custom_image_classification",
+	.version = "0.1",
+	.init = init,
+	.fini = fini
+)
+```
+vaccelrt/plugins/tpu/classify.h
+```c
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+char* classify_image(
+                char* model_path,
+                char* image_path,
+                char* labels_path,
+                float input_mean,
+                float input_std
+            );
+
+#ifdef __cplusplus
+}
+#endif
+```
+
+## Example
+vaccelrt/examples/tpu_img_class.c
+```c
+#include <stdlib.h>
+#include <stdio.h>
+#include <string.h>
+#include <vaccel.h>
+
+int main()
+{
+	int ret;
+	struct vaccel_session sess;
+	
+	char *model_path = (char*)malloc(1000*sizeof(char));
+	strcpy(model_path, "/home/mendel/classify/mobilenet_v1_1.0_224_quant_edgetpu.tflite\0");
+	
+	char *image_path = (char*)malloc(1000*sizeof(char));
+	strcpy(image_path, "/home/mendel/classify/cat.rgb\0");
+
+	char *labels_path = (char*)malloc(1000*sizeof(char));
+	strcpy(labels_path, "/home/mendel/classify/imagenet_labels.txt\0");
+
+	float input_mean = 128;
+	float input_std = 128;
+	
+	char* output = (char*)malloc(1000*sizeof(char));
+
+	ret = vaccel_sess_init(&sess, 0);
+	if (ret != VACCEL_OK) {
+		fprintf(stderr, "Could not initialize session\n");
+		return 1;
+	}
+
+
+	printf("Initialized session with id: %u\n", sess.session_id);
+
+
+	ret = vaccel_custom_image_classification(&sess, model_path, image_path, labels_path, input_mean, input_std, output);
+	if (ret) {
+		fprintf(stderr, "Could not run op: %d\n", ret);
+		goto close_session;
+	}
+
+	printf("\nOutput from tpu-plugin: \n%s\n", output);
+
+
+close_session:
+	if (vaccel_sess_free(&sess) != VACCEL_OK) {
+		fprintf(stderr, "Could not clear session\n");
+		return 1;
+	}
+	
+	free(model_path);
+	free(image_path);
+	free(labels_path);
+	free(output);
+
+	return ret;
+}
+```
 ## License
 
 [Apache License 2.0](LICENSE)
