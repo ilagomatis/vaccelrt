@@ -275,6 +275,20 @@ close_session:
 	return ret;
 }
 ```
+
+## Build & Run
+
+```
+mkdir build
+cd build
+cmake ../ -DBUILD_PLUGIN_TPU=ON
+make
+gcc -I ../src/include/ -I ../third-party/slog/src ../examples/tpu_img_class.c -c
+gcc -L src tpu_img_class.o -o tpu_img_class -lvaccel -lclassify -ldl
+# place libclassify.so inside vaccelrt/build/src directory
+LD_LIBRARY_PATH=./src VACCEL_DEBUG_LEVEL=4 VACCEL_BACKENDS=./plugins/tpu/libvaccel-tpu.so  ./tpu_img_class
+
+```
 ## License
 
 [Apache License 2.0](LICENSE)
